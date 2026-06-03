@@ -77,7 +77,9 @@ export default function QuizCard({
   };
 
   return (
-    <Animated.View className="bg-surface rounded-2xl p-5" style={shakeAnim}>
+    <View className="bg-surface rounded-2xl">
+      <Animated.View style={[{ overflow: "visible" }, shakeAnim]}>
+        <View className="p-5">
       {totalQuestions !== undefined && questionIndex !== undefined && (
         <View className="flex-row items-center justify-end mb-3">
           <View className="bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center">
@@ -156,6 +158,8 @@ export default function QuizCard({
             : "Confirmar Resposta"}
         </Text>
       </TouchableOpacity>
-    </Animated.View>
+        </View>
+      </Animated.View>
+    </View>
   );
 }
