@@ -9,7 +9,7 @@ type RecorderStatus = "initializing" | "ready" | "error" | "no-module";
 
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const STABILITY_HISTORY = 2;
-const RMS_THRESHOLD = 0.003;
+const RMS_THRESHOLD = 0.008;
 const UI_THROTTLE_MS = 30;
 const TUNING_HZ_TOLERANCE = 1.0;
 
