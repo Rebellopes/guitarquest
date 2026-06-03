@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming, Easing, runOnJS } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+  Easing,
+  runOnJS,
+} from "react-native-reanimated";
 import type { QuizQuestion } from "../types";
 
 interface QuizCardProps {
@@ -11,7 +18,13 @@ interface QuizCardProps {
   totalQuestions?: number;
 }
 
-export default function QuizCard({ question, onComplete, isLastExercise, questionIndex, totalQuestions }: QuizCardProps) {
+export default function QuizCard({
+  question,
+  onComplete,
+  isLastExercise,
+  questionIndex,
+  totalQuestions,
+}: QuizCardProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const shake = useSharedValue(0);
@@ -47,7 +60,9 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
 
   const getOptionStyle = (idx: number) => {
     if (!showResult || selectedIndex === null) {
-      return selectedIndex === idx ? "border-primary bg-primary/10" : "border-transparent bg-surface";
+      return selectedIndex === idx
+        ? "border-primary bg-primary/10"
+        : "border-transparent bg-surface";
     }
     if (idx === question.correctIndex) return "border-green-500 bg-green-500/10";
     if (idx === selectedIndex && !isCorrect) return "border-red-500 bg-red-500/10";
@@ -72,13 +87,11 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
           </View>
         </View>
       )}
-      <View className="mb-4" style={{ flexDirection: "row", alignItems: "flex-start" }}>
-        <Text className="text-2xl mr-2 mt-0.5">📝</Text>
-        <View style={{ flex: 1, flexShrink: 1 }}>
-          <Text className="text-white font-bold text-lg leading-6">
-            {question.question}
-          </Text>
-        </View>
+      <View className="mb-4 flex-row items-start">
+        <Text className="text-2xl mr-2">📝</Text>
+        <Text style={{ flex: 1 }} className="text-white font-bold text-lg leading-6">
+          {question.question}
+        </Text>
       </View>
 
       {question.options.map((opt, idx) => (
@@ -88,19 +101,23 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
           onPress={() => handleSelect(idx)}
           disabled={showResult}
         >
-          <View className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${
-            showResult && idx === question.correctIndex
-              ? "bg-green-500"
-              : showResult && idx === selectedIndex && !isCorrect
-              ? "bg-red-500"
-              : selectedIndex === idx
-              ? "bg-primary"
-              : "bg-surface-light"
-          }`}>
+          <View
+            className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${
+              showResult && idx === question.correctIndex
+                ? "bg-green-500"
+                : showResult && idx === selectedIndex && !isCorrect
+                  ? "bg-red-500"
+                  : selectedIndex === idx
+                    ? "bg-primary"
+                    : "bg-surface-light"
+            }`}
+          >
             <Text className="text-white font-bold text-sm">
-              {showResult && idx === question.correctIndex ? "✓" : 
-               showResult && idx === selectedIndex && !isCorrect ? "✗" :
-               String.fromCharCode(65 + idx)}
+              {showResult && idx === question.correctIndex
+                ? "✓"
+                : showResult && idx === selectedIndex && !isCorrect
+                  ? "✗"
+                  : String.fromCharCode(65 + idx)}
             </Text>
           </View>
           <View className="flex-1">
@@ -131,9 +148,7 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
         disabled={selectedIndex === null}
         onPress={showResult ? handleNext : handleConfirm}
       >
-        <Text className={`font-bold ${
-          selectedIndex !== null ? "text-white" : "text-gray-500"
-        }`}>
+        <Text className={`font-bold ${selectedIndex !== null ? "text-white" : "text-gray-500"}`}>
           {showResult
             ? isLastExercise
               ? "Finalizar Lição 🏆"
