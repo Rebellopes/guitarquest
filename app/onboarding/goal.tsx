@@ -49,14 +49,14 @@ export default function OnboardingGoal() {
         <Text className="text-white text-2xl font-bold">
           Qual seu objetivo?
         </Text>
-        <Text className="text-gray-400 mt-2 mb-6">
+        <Text className="text-gray-400 mt-2 mb-4">
           Escolha o que mais combina com você
         </Text>
 
         {GOALS.map((goal) => (
           <TouchableOpacity
             key={goal.type}
-            className={`flex-row items-center p-4 mb-3 rounded-2xl border-2 ${
+            className={`flex-row items-center p-4 mb-4 rounded-2xl border-2 ${
               selected === goal.type
                 ? "border-primary bg-primary/10"
                 : "border-transparent bg-surface"

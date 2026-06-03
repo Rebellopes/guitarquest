@@ -57,7 +57,7 @@ export default function PracticeExercise({ exercise, onComplete, isLastExercise 
   };
 
   return (
-    <View className="bg-surface rounded-2xl p-5">
+    <View className="bg-surface rounded-2xl p-4">
       <View className="flex-row items-center mb-4">
         <Text className="text-2xl mr-2">🎯</Text>
         <Text className="text-white font-bold text-lg flex-1">{exercise.title}</Text>

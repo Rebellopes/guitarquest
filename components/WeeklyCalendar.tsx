@@ -36,7 +36,7 @@ export default function WeeklyCalendar({ completedDates: _completedDates }: Prop
   const count = selected ? completedDates[selected] || 0 : 0;
 
   return (
-    <View className="bg-surface rounded-2xl p-4 mt-3">
+    <View className="bg-surface rounded-2xl p-4 mb-4">
       <Text className="text-white text-sm font-bold mb-3">Últimos 7 dias</Text>
       <View className="flex-row justify-between">
         {days.map((day) => {

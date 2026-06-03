@@ -84,7 +84,7 @@ export default function SettingsScreen() {
         <Text className="text-white text-2xl font-bold mb-6">Configurações ⚙️</Text>
 
         <Text className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Plano de Estudos</Text>
-        <View className="bg-surface rounded-2xl p-5 mb-6">
+        <View className="bg-surface rounded-2xl p-4 mb-6">
           <Text className="text-white text-sm font-bold mb-3">Dias da Semana</Text>
           <View className="flex-row justify-between">
             {DAYS.map((d) => {
@@ -141,7 +141,7 @@ export default function SettingsScreen() {
         </View>
 
         <Text className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Preferências</Text>
-        <View className="bg-surface rounded-2xl p-5 mb-6">
+        <View className="bg-surface rounded-2xl p-4 mb-6">
           <SettingRow label="Notificações" value={plan.notificationsEnabled} onChange={toggleNotifications} />
           <View className="h-px bg-surface-light my-3" />
           <SettingRow label="Som" value={plan.soundEnabled} onChange={(v) => updatePlan({ soundEnabled: v })} />
@@ -150,7 +150,7 @@ export default function SettingsScreen() {
         </View>
 
         <Text className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Sobre</Text>
-        <View className="bg-surface rounded-2xl p-5 mb-10">
+        <View className="bg-surface rounded-2xl p-4 mb-10">
           <AboutRow label="Versão" value="1.0.0" />
           <View className="h-px bg-surface-light my-3" />
           <AboutRow label="Licenças" value="MIT" />

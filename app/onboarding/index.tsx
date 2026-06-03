@@ -5,7 +5,7 @@ import { router } from "expo-router";
 export default function OnboardingWelcome() {
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1 items-center justify-center px-8">
+      <View className="flex-1 items-center justify-center px-5">
         <Text className="text-7xl mb-6">🎸</Text>
         <Text className="text-white text-3xl font-bold text-center">
           Bem-vindo ao{" "}
@@ -38,7 +38,7 @@ export default function OnboardingWelcome() {
         </View>
       </View>
 
-      <View className="px-8 pb-10">
+      <View className="px-5 pb-10">
         <TouchableOpacity
           className="bg-primary py-4 rounded-2xl items-center"
           onPress={() => router.push("/onboarding/goal")}

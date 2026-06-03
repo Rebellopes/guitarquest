@@ -41,7 +41,7 @@ export default function OnboardingConfirm() {
         <Text className="text-gray-400 text-sm mt-2">Passo 3 de 3</Text>
       </View>
 
-      <View className="flex-1 items-center justify-center px-8">
+      <View className="flex-1 items-center justify-center px-5">
         <Text className="text-6xl mb-4">{goalInfo.icon}</Text>
         <Text className="text-white text-2xl font-bold text-center">
           Tudo pronto!
@@ -53,7 +53,7 @@ export default function OnboardingConfirm() {
         </Text>
       </View>
 
-      <View className="px-8 pb-10">
+      <View className="px-5 pb-10">
         <TouchableOpacity
           className="bg-primary py-4 rounded-2xl items-center"
           onPress={handleStart}

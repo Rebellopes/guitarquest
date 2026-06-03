@@ -43,16 +43,16 @@ function LessonCard({
   }, [status, pulseAnim]);
 
   return (
-    <TouchableOpacity
-      disabled={isLocked}
-      onPress={() => router.push(`/lesson/${lesson.id}`)}
-      className={`flex-row items-center p-4 mb-3 rounded-2xl ${
-        isLocked
-          ? "bg-surface opacity-50"
-          : isCompleted
-          ? "bg-surface border border-green-600"
-          : "bg-surface"
-      }`}
+      <TouchableOpacity
+        disabled={isLocked}
+        onPress={() => router.push(`/lesson/${lesson.id}`)}
+        className={`flex-row items-center p-4 mb-4 rounded-2xl ${
+          isLocked
+            ? "bg-surface opacity-50"
+            : isCompleted
+            ? "bg-surface border border-green-600"
+            : "bg-surface"
+        }`}
       style={
         status === "available"
           ? { borderWidth: 1, borderColor: "#6C63FF", opacity: pulseAnim as any }
@@ -136,7 +136,7 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <View className="mx-5 mt-3">
+      <View className="mx-5 mt-4">
         <StarPowerBanner
           currentStreak={streakData.currentStreak}
           longestStreak={streakData.longestStreak}
@@ -162,7 +162,7 @@ export default function HomeScreen() {
         contentContainerStyle={{
           paddingHorizontal: 20,
           paddingTop: 16,
-          paddingBottom: 100,
+          paddingBottom: 40,
         }}
         renderItem={({ item }) => (
           <LessonCard lesson={item} status={getStatus(item)} />

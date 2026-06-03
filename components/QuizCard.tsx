@@ -79,7 +79,7 @@ export default function QuizCard({
   return (
     <View className="bg-surface rounded-2xl">
       <Animated.View style={[{ overflow: "visible" }, shakeAnim]}>
-        <View className="p-5">
+        <View className="p-4">
       {totalQuestions !== undefined && questionIndex !== undefined && (
         <View className="flex-row items-center justify-end mb-3">
           <View className="bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center">
