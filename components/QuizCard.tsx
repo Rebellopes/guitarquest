@@ -62,8 +62,7 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
   };
 
   return (
-    <Animated.View className="bg-surface rounded-2xl overflow-hidden" style={shakeAnim}>
-      <View className="p-5">
+    <Animated.View className="bg-surface rounded-2xl p-5" style={shakeAnim}>
       {totalQuestions !== undefined && questionIndex !== undefined && (
         <View className="flex-row items-center justify-end mb-3">
           <View className="bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center">
@@ -73,10 +72,10 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
           </View>
         </View>
       )}
-      <View className="flex-row items-start mb-4">
-        <Text className="text-2xl mr-2 mt-0.5 flex-shrink-0">📝</Text>
-        <View className="flex-1 shrink" style={{ overflow: "hidden" }}>
-          <Text className="text-white font-bold text-lg leading-6" style={{ flexShrink: 1 }}>
+      <View className="mb-4" style={{ flexDirection: "row", alignItems: "flex-start" }}>
+        <Text className="text-2xl mr-2 mt-0.5">📝</Text>
+        <View style={{ flex: 1, flexShrink: 1 }}>
+          <Text className="text-white font-bold text-lg leading-6">
             {question.question}
           </Text>
         </View>
@@ -142,7 +141,6 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
             : "Confirmar Resposta"}
         </Text>
       </TouchableOpacity>
-      </View>
     </Animated.View>
   );
 }
