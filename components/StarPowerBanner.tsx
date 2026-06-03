@@ -116,21 +116,26 @@ export default function StarPowerBanner({ currentStreak, longestStreak, onShare 
         </View>
       )}
 
-      <View className="flex-row justify-between mt-3">
+      <View className="flex-row items-end justify-between mt-4 px-1">
         {[1, 7, 30, 60, 100].map((day) => {
           const reached = currentStreak >= day;
           const m = MILESTONES.find((m) => m.days === day);
           return (
-            <View key={day} className="items-center">
+            <View key={day} className="items-center" style={{ width: 52 }}>
               <View
-                className={`w-8 h-8 rounded-full items-center justify-center ${
-                  reached ? "" : "bg-surface-light"
+                className={`w-10 h-10 rounded-full items-center justify-center ${
+                  reached ? "" : "bg-[#1E1E2E]"
                 }`}
-                style={reached ? { backgroundColor: m?.color + "40" } : {}}
+                style={reached ? { backgroundColor: m?.color + "30" } : { borderWidth: 1, borderColor: "#2A2A3D" }}
               >
-                <Text className="text-sm">{reached ? m?.icon : String(day)}</Text>
+                <Text className="text-lg">{reached ? m?.icon : ""}</Text>
               </View>
-              <Text className={`text-xs mt-1 ${reached ? "text-white" : "text-gray-600"}`}>
+              <Text
+                className={`text-xs mt-1.5 font-bold ${
+                  reached ? (m ? { color: m.color } : "text-white") : "text-gray-600"
+                }`}
+                style={reached && m ? { color: m.color } : {}}
+              >
                 {day}
               </Text>
             </View>

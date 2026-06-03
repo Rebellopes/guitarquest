@@ -359,28 +359,32 @@ export default function LessonScreen() {
         animationType="fade"
         onRequestClose={() => setShowCompletionModal(false)}
       >
-        <View className="flex-1 bg-black/60 items-center justify-center px-6">
-          <View className="bg-surface rounded-3xl p-6 w-full max-w-sm items-center">
-            <Text className="text-5xl mb-4">🏆</Text>
-            <Text className="text-white text-2xl font-bold mb-2">
-              Lição Concluída!
-            </Text>
-            <Text className="text-gray-400 text-center mb-4">
-              {lesson.title}
-            </Text>
+        <View className="flex-1 bg-black/60 items-center justify-center px-5">
+          <View className="bg-surface rounded-3xl p-5 w-full max-w-sm">
+            <View className="items-center mb-4">
+              <Text className="text-4xl mb-2">🏆</Text>
+              <Text className="text-white text-xl font-bold">
+                Lição Concluída!
+              </Text>
+              <Text className="text-gray-400 text-xs text-center mt-1">
+                {lesson.title}
+              </Text>
+            </View>
 
-            <View className="flex-row justify-between w-full mb-4">
+            <View className="flex-row justify-between bg-background rounded-2xl px-4 py-3 mb-4">
               <View className="items-center flex-1">
-                <Text className="text-green-400 text-2xl font-bold">{correctCount}</Text>
-                <Text className="text-gray-500 text-xs">Corretas</Text>
+                <Text className="text-green-400 text-xl font-bold">{correctCount}</Text>
+                <Text className="text-gray-500 text-[10px]">Corretas</Text>
               </View>
+              <View className="w-px bg-surface-light self-stretch" />
               <View className="items-center flex-1">
-                <Text className="text-red-400 text-2xl font-bold">{wrongCount}</Text>
-                <Text className="text-gray-500 text-xs">Erradas</Text>
+                <Text className="text-red-400 text-xl font-bold">{wrongCount}</Text>
+                <Text className="text-gray-500 text-[10px]">Erradas</Text>
               </View>
+              <View className="w-px bg-surface-light self-stretch" />
               <View className="items-center flex-1">
-                <Text className="text-primary text-2xl font-bold">{exercises.length}</Text>
-                <Text className="text-gray-500 text-xs">Total</Text>
+                <Text className="text-primary text-xl font-bold">{exercises.length}</Text>
+                <Text className="text-gray-500 text-[10px]">Total</Text>
               </View>
             </View>
 
@@ -391,7 +395,7 @@ export default function LessonScreen() {
             />
 
             <TouchableOpacity
-              className="w-full mt-6 bg-primary py-4 rounded-xl items-center"
+              className="w-full mt-5 bg-primary py-4 rounded-xl items-center"
               onPress={handleCompleteLesson}
             >
               <Text className="text-white font-bold">
