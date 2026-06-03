@@ -63,13 +63,15 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
 
   return (
     <Animated.View className="bg-surface rounded-2xl p-5" style={shakeAnim}>
-      <View className="flex-row items-center mb-4">
-        <Text className="text-2xl mr-2">📝</Text>
-        <Text className="text-white font-bold text-lg flex-1">
-          {question.question}
-        </Text>
+      <View className="flex-row items-start mb-4">
+        <Text className="text-2xl mr-2 mt-0.5">📝</Text>
+        <View className="flex-1 mr-2">
+          <Text className="text-white font-bold text-lg leading-6">
+            {question.question}
+          </Text>
+        </View>
         {totalQuestions && questionIndex !== undefined && (
-          <Text className="text-gray-500 text-xs">
+          <Text className="text-gray-500 text-xs mt-1">
             {questionIndex + 1}/{totalQuestions}
           </Text>
         )}
@@ -97,9 +99,11 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
                String.fromCharCode(65 + idx)}
             </Text>
           </View>
-          <Text className={`flex-1 text-sm font-medium ${getOptionTextStyle(idx)}`}>
-            {opt}
-          </Text>
+          <View className="flex-1">
+            <Text className={`text-sm font-medium leading-5 ${getOptionTextStyle(idx)}`}>
+              {opt}
+            </Text>
+          </View>
         </TouchableOpacity>
       ))}
 

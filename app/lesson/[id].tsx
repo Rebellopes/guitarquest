@@ -318,7 +318,7 @@ export default function LessonScreen() {
         <Text className="text-gray-400 mt-1 text-sm">{lesson.description}</Text>
       </View>
 
-      {lesson.videoUrl && currentExerciseIndex === 0 && (
+      {lesson.videoUrl && (
         <View className="px-5 mt-4">
           <YouTubePlayer videoUrl={lesson.videoUrl} />
         </View>
@@ -337,21 +337,7 @@ export default function LessonScreen() {
         </View>
       )}
 
-      <View className="flex-row justify-center mt-3 space-x-2">
-        {exercises.map((_, idx) => (
-          <TouchableOpacity
-            key={idx}
-            onPress={() => goToExercise(idx)}
-            className={`w-2.5 h-2.5 rounded-full ${
-              idx === currentExerciseIndex
-                ? "bg-primary"
-                : completedExercises.has(exercises[idx].id)
-                ? "bg-green-600"
-                : "bg-surface-light"
-            }`}
-          />
-        ))}
-      </View>
+
 
       <FlatList
         ref={listRef}
