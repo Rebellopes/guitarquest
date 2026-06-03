@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { View, Text, TouchableOpacity, FlatList, Modal } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, Modal, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { useProgressStore } from "../../store";
@@ -84,9 +84,10 @@ export default function LessonScreen() {
 
   const renderExercise = useCallback(
     ({ item }: { item: Exercise }) => {
+      const screenWidth = Dimensions.get("window").width;
       if (item.type === "quiz" && item.quizData) {
         return (
-          <View className="px-5">
+          <View style={{ width: screenWidth }} className="px-5">
             <QuizCard
               question={item.quizData}
               onComplete={(correct, selectedIndex) => handleExerciseComplete(item.id, correct, selectedIndex)}
@@ -100,7 +101,7 @@ export default function LessonScreen() {
 
       if (item.type === "practice") {
         return (
-          <View className="px-5">
+          <View style={{ width: screenWidth }} className="px-5">
             <PracticeExercise
               exercise={item}
               onComplete={() => handleExerciseComplete(item.id)}
