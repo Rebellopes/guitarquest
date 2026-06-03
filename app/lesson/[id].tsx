@@ -266,7 +266,7 @@ export default function LessonScreen() {
           }}
         />
 
-        <View className="px-5 pb-8 flex-row gap-4">
+        <View className="px-5 pb-10 flex-row gap-4">
           <TouchableOpacity
             className="flex-1 bg-surface border border-gray-600 py-4 rounded-2xl items-center"
             onPress={() => router.back()}
