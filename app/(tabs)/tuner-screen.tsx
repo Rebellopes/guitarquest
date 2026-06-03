@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { requestRecordingPermissionsAsync } from "expo-audio";
-import { AudioRecorder } from "react-native-audio-api";
+import { AudioRecorder, AudioManager } from "react-native-audio-api";
 import { detectFrequency, findClosestString, findClosestStringLoose, GUITAR_STRINGS } from "../../utils/pitchDetection";
 
 type RecorderStatus = "initializing" | "ready" | "error" | "no-module";
@@ -44,6 +43,8 @@ export default function TunerScreen() {
   const [detectedString, setDetectedString] = useState<number | null>(null);
   const [cents, setCents] = useState(0);
   const [selectedString, setSelectedString] = useState<number>(6);
+  const [numFrames, setNumFrames] = useState(0);
+  const [bufferCount, setBufferCount] = useState(0);
   const recorderRef = useRef<AudioRecorder | null>(null);
 
   const lastUpdateRef = useRef(0);
@@ -54,13 +55,17 @@ export default function TunerScreen() {
       const audioBuffer = event.buffer;
       const buffer = audioBuffer?.getChannelData?.(0);
       if (!buffer || buffer.length < 100) return;
-      const freq = detectFrequency(buffer, audioBuffer.sampleRate);
+      const sampleRate = audioBuffer?.sampleRate || event.sampleRate || 44100;
+      const freq = detectFrequency(buffer, sampleRate);
       if (freq <= 0) return;
 
       const match = findClosestString(freq);
       const loose = match || findClosestStringLoose(freq);
 
       latestDataRef.current = { freq: Math.round(freq), match: loose };
+
+      setNumFrames(event.numFrames || 0);
+      setBufferCount((c) => c + 1);
 
       const now = Date.now();
       if (now - lastUpdateRef.current < 120) return;
@@ -74,27 +79,30 @@ export default function TunerScreen() {
       } else {
         setDetectedString(null);
       }
-    } catch {}
+    } catch (err) {
+      console.warn("[Tuner] onAudioData error:", err);
+    }
   }, []);
 
-  const requestMicPermission = async (): Promise<boolean> => {
-    try {
-      const { granted } = await requestRecordingPermissionsAsync();
-      return granted;
-    } catch { return false; }
-  };
-
   const initRecorder = useCallback(async () => {
-    const hasPermission = await requestMicPermission();
-    if (!hasPermission) {
-      setStatus("error");
-      setErrorMsg("Permissão do microfone negada");
-      return;
-    }
     try {
+      const permission = await AudioManager.requestRecordingPermissions();
+      if (permission !== "Granted") {
+        setStatus("error");
+        setErrorMsg("Permissão do microfone negada");
+        return;
+      }
+
+      await AudioManager.setAudioSessionActivity(true);
+
       const recorder = new AudioRecorder();
       recorderRef.current = recorder;
       setStatus("ready");
+
+      recorder.onError((error) => {
+        console.warn("[Tuner] Recorder error:", error.message);
+      });
+
       const result = recorder.onAudioReady(
         { sampleRate: 44100, bufferLength: 4096, channelCount: 1 },
         onAudioData
@@ -126,7 +134,9 @@ export default function TunerScreen() {
         if (r) {
           if (r.isRecording()) r.stop();
           r.clearOnAudioReady();
+          r.clearOnError();
         }
+        AudioManager.setAudioSessionActivity(false);
       } catch {}
     };
   }, [initRecorder]);
@@ -234,7 +244,7 @@ export default function TunerScreen() {
 
         <View className="bg-surface rounded-2xl px-5 py-4 mb-4">
           <Text className="text-gray-400 text-sm">Alvo: {targetString?.label} ({targetString?.string}ª corda)</Text>
-          <Text className="text-gray-400 text-sm">Detectado: {frequency} Hz</Text>
+          <Text className="text-gray-400 text-sm">Detectado: {frequency} Hz · frames: {numFrames} · buffers: {bufferCount}</Text>
         </View>
       </View>
     </SafeAreaView>
