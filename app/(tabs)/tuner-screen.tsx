@@ -67,20 +67,6 @@ export default function TunerScreen() {
   const lastUiUpdateRef = useRef(0);
   const stringHistoryRef = useRef<number[]>([]);
   const stableMatchRef = useRef<StringMatch | null>(null);
-  const silenceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const SILENCE_TIMEOUT = 600;
-
-  const scheduleSilenceReset = useCallback(() => {
-    if (silenceTimeoutRef.current) clearTimeout(silenceTimeoutRef.current);
-    silenceTimeoutRef.current = setTimeout(() => {
-      setSelectedString(null);
-      setFrequency(0);
-      setCents(0);
-      stringHistoryRef.current = [];
-      stableMatchRef.current = null;
-    }, SILENCE_TIMEOUT);
-  }, []);
 
   const onAudioData = useCallback((event: any) => {
     try {
@@ -98,8 +84,6 @@ export default function TunerScreen() {
       const match = findClosestString(freq);
       const loose = match || findClosestStringLoose(freq);
       if (!loose) return;
-
-      scheduleSilenceReset();
 
       const history = stringHistoryRef.current;
       history.push(loose.string);
@@ -120,7 +104,7 @@ export default function TunerScreen() {
     } catch (err) {
       console.warn("[Tuner] onAudioData error:", err);
     }
-  }, [scheduleSilenceReset]);
+  }, []);
 
   const initRecorder = useCallback(async () => {
     try {
@@ -167,7 +151,6 @@ export default function TunerScreen() {
     const t = setTimeout(() => initRecorder(), 300);
     return () => {
       clearTimeout(t);
-      if (silenceTimeoutRef.current) clearTimeout(silenceTimeoutRef.current);
       try {
         const r = recorderRef.current;
         if (r) {
