@@ -70,8 +70,18 @@ export default function TunerScreen() {
 
   const lastUiUpdateRef = useRef(0);
   const stringHistoryRef = useRef<number[]>([]);
+  const freqHistoryRef = useRef<number[]>([]);
   const stableMatchRef = useRef<StringMatch | null>(null);
   const manualLockRef = useRef(false);
+  const selectedStringRef = useRef<number | null>(null);
+  selectedStringRef.current = selectedString;
+
+  function getMedianFreq(): number {
+    const fh = freqHistoryRef.current;
+    if (fh.length === 0) return 0;
+    const sorted = [...fh].sort((a, b) => a - b);
+    return sorted[Math.floor(sorted.length / 2)];
+  }
 
   const onAudioData = useCallback((event: any) => {
     try {
@@ -86,24 +96,47 @@ export default function TunerScreen() {
       const freq = detectFrequency(buffer, sampleRate);
       if (freq <= 0) return;
 
-      const match = findClosestString(freq);
-      const loose = match || findClosestStringLoose(freq);
+      const fh = freqHistoryRef.current;
+      fh.push(freq);
+      if (fh.length > 5) fh.shift();
+      const medianFreq = getMedianFreq();
+      if (medianFreq <= 0) return;
+
+      const now = Date.now();
+      const throttled = now - lastUiUpdateRef.current < UI_THROTTLE_MS;
+
+      if (manualLockRef.current && selectedStringRef.current) {
+        const target = GUITAR_STRINGS.find(s => s.string === selectedStringRef.current);
+        if (target) {
+          const c = Math.round(1200 * Math.log(medianFreq / target.frequency) / Math.log(2));
+          stableMatchRef.current = {
+            string: target.string, label: target.label, targetFreq: target.frequency, cents: c,
+          };
+          if (!throttled) {
+            lastUiUpdateRef.current = now;
+            setFrequency(Math.round(medianFreq));
+            setCents(c);
+          }
+          return;
+        }
+      }
+
+      const match = findClosestString(medianFreq);
+      const loose = match || findClosestStringLoose(medianFreq);
       if (!loose) return;
 
       const history = stringHistoryRef.current;
       history.push(loose.string);
       if (history.length > STABILITY_HISTORY) history.shift();
-
       const stable = getStableString(history);
       if (!stable) return;
 
       stableMatchRef.current = loose;
 
-      const now = Date.now();
-      if (now - lastUiUpdateRef.current < UI_THROTTLE_MS) return;
+      if (throttled) return;
       lastUiUpdateRef.current = now;
 
-      setFrequency(Math.round(freq));
+      setFrequency(Math.round(medianFreq));
       setCents(loose.cents);
       if (!manualLockRef.current) {
         setSelectedString(stable);
