@@ -66,14 +66,16 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
       <View className="flex-row items-start mb-4">
         <Text className="text-2xl mr-2 mt-0.5">📝</Text>
         <View className="flex-1 mr-2">
-          <Text className="text-white font-bold text-lg leading-6">
+          <Text className="text-white font-bold text-lg leading-6 break-words">
             {question.question}
           </Text>
         </View>
-        {totalQuestions && questionIndex !== undefined && (
-          <Text className="text-gray-500 text-xs mt-1">
-            {questionIndex + 1}/{totalQuestions}
-          </Text>
+        {totalQuestions !== undefined && questionIndex !== undefined && (
+          <View className="bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center">
+            <Text className="text-gray-500 text-xs font-bold">
+              {questionIndex + 1}/{totalQuestions}
+            </Text>
+          </View>
         )}
       </View>
 
