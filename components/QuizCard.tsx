@@ -62,12 +62,14 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
   };
 
   return (
-    <Animated.View className="bg-surface rounded-2xl p-5 relative" style={shakeAnim}>
+    <Animated.View className="bg-surface rounded-2xl p-5" style={shakeAnim}>
       {totalQuestions !== undefined && questionIndex !== undefined && (
-        <View className="absolute top-3 right-3 bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center z-10">
-          <Text className="text-gray-500 text-xs font-bold">
-            {questionIndex + 1}/{totalQuestions}
-          </Text>
+        <View className="flex-row items-center justify-end mb-3">
+          <View className="bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center">
+            <Text className="text-gray-500 text-xs font-bold">
+              {questionIndex + 1}/{totalQuestions}
+            </Text>
+          </View>
         </View>
       )}
       <View className="flex-row items-start mb-4">
