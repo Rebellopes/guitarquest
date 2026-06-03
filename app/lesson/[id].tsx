@@ -157,12 +157,6 @@ export default function LessonScreen() {
           <Text className="text-gray-400 mt-1 text-sm">{lesson.description}</Text>
         </View>
 
-        {lesson.videoUrl && (
-          <View className="px-5 mt-4">
-            <YouTubePlayer videoUrl={lesson.videoUrl} />
-          </View>
-        )}
-
         <FlatList
           data={exercises}
           keyExtractor={(item) => item.id}
@@ -272,7 +266,7 @@ export default function LessonScreen() {
           }}
         />
 
-        <View className="px-5 pb-8 flex-row space-x-3">
+        <View className="px-5 pb-8 flex-row gap-4">
           <TouchableOpacity
             className="flex-1 bg-surface border border-gray-600 py-4 rounded-2xl items-center"
             onPress={() => router.back()}
@@ -337,8 +331,6 @@ export default function LessonScreen() {
           </View>
         </View>
       )}
-
-
 
       <FlatList
         ref={listRef}
