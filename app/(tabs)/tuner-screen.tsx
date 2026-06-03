@@ -8,9 +8,10 @@ import type { StringMatch } from "../../utils/pitchDetection";
 type RecorderStatus = "initializing" | "ready" | "error" | "no-module";
 
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const STABILITY_HISTORY = 5;
+const STABILITY_HISTORY = 3;
 const RMS_THRESHOLD = 0.008;
 const UI_THROTTLE_MS = 30;
+const TUNING_HZ_TOLERANCE = 1.0;
 
 function freqToNoteName(freq: number): string {
   if (freq <= 0) return "--";
@@ -25,11 +26,14 @@ function getDeviationColor(cents: number): string {
   return "#EF476F";
 }
 
-function getDeviationLabel(cents: number): string {
+function getDeviationLabel(cents: number, tunerFreq: number, targetFreq: number): string {
+  if (TUNING_HZ_TOLERANCE > 0 && Math.abs(tunerFreq - targetFreq) <= TUNING_HZ_TOLERANCE) {
+    return "Afinado!";
+  }
   const abs = Math.abs(cents);
   if (abs <= 5) return "Afinado!";
-  if (cents > 0) return "Aperte a corda ↑";
-  return "Afrouxe a corda ↓";
+  if (cents > 0) return "Afrouxe a corda ↓";
+  return "Aperte a corda ↑";
 }
 
 function getDeviationBg(cents: number): string {
@@ -170,7 +174,7 @@ export default function TunerScreen() {
   const activeMatch = stableMatchRef.current;
   const showTarget = targetString && selectedString !== null;
   const deviationColor = getDeviationColor(cents);
-  const deviationLabel = getDeviationLabel(cents);
+  const deviationLabel = getDeviationLabel(cents, frequency, targetString?.frequency ?? 0);
   const deviationBg = getDeviationBg(cents);
   const barPosition = (() => {
     const clamped = Math.max(-50, Math.min(50, cents));
