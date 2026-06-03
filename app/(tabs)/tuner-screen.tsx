@@ -67,6 +67,7 @@ export default function TunerScreen() {
   const lastUiUpdateRef = useRef(0);
   const stringHistoryRef = useRef<number[]>([]);
   const stableMatchRef = useRef<StringMatch | null>(null);
+  const manualLockRef = useRef(false);
 
   const onAudioData = useCallback((event: any) => {
     try {
@@ -100,7 +101,9 @@ export default function TunerScreen() {
 
       setFrequency(Math.round(freq));
       setCents(loose.cents);
-      setSelectedString(stable);
+      if (!manualLockRef.current) {
+        setSelectedString(stable);
+      }
     } catch (err) {
       console.warn("[Tuner] onAudioData error:", err);
     }
@@ -223,7 +226,7 @@ export default function TunerScreen() {
           {showTarget ? (
             <View className="items-center">
               <Text className="text-gray-400 text-sm mb-1">
-                {targetString!.label} ({targetString!.string}ª corda) · {targetString!.frequency} Hz
+                {targetString!.label} ({targetString!.string}ª corda) · {targetString!.frequency} Hz {manualLockRef.current ? "🔒" : ""}
               </Text>
               <View className="h-2 w-56 bg-surface-light rounded-full overflow-hidden mb-3">
                 <View className="h-full rounded-full" style={{ width: 8, marginLeft: `${barPosition}%`, backgroundColor: deviationColor, borderRadius: 4 }} />
@@ -245,10 +248,19 @@ export default function TunerScreen() {
         <View className="flex-row justify-between px-2 pb-4">
           {[...GUITAR_STRINGS].reverse().map((s) => {
             const isTarget = selectedString === s.string;
+            const isLocked = manualLockRef.current && isTarget;
             const borderColor = isTarget ? deviationColor : "#2A2A3D";
             const textColor = isTarget ? "#fff" : "#6B7280";
             return (
-              <View key={s.string} className="items-center">
+              <TouchableOpacity key={s.string} className="items-center"
+                onPress={() => {
+                  if (manualLockRef.current && isTarget) {
+                    manualLockRef.current = false;
+                  } else {
+                    manualLockRef.current = true;
+                    setSelectedString(s.string);
+                  }
+                }}>
                 <Text className="text-gray-500 text-xs mb-1">{s.string}ª</Text>
                 <View className="w-12 h-12 rounded-full items-center justify-center border-2"
                   style={{ backgroundColor: isTarget ? deviationColor + "20" : "transparent", borderColor }}>
@@ -256,7 +268,8 @@ export default function TunerScreen() {
                     {s.label}
                   </Text>
                 </View>
-              </View>
+                {isLocked && <Text className="text-[10px] mt-0.5" style={{ color: deviationColor }}>▼</Text>}
+              </TouchableOpacity>
             );
           })}
         </View>

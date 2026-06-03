@@ -11,11 +11,13 @@ const GUITAR_STRINGS = [
   { name: "E2", frequency: 82.41, string: 6, label: "E" },
 ];
 
-const detectPitch = YIN({ sampleRate: 44100, threshold: 0.1, probabilityThreshold: 0.1 });
+const detectPitch = YIN({ sampleRate: 44100, threshold: 0.1, probabilityThreshold: 0.15 });
 
 function detectFrequency(buffer: Float32Array, sampleRate: number): number {
   const freq = detectPitch(buffer);
-  return freq ?? 0;
+  if (!freq) return 0;
+  if (freq < 60 || freq > 1000) return 0;
+  return freq;
 }
 
 function frequencyToNote(freq: number): { note: string; cents: number; midi: number } {
