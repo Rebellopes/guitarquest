@@ -58,6 +58,16 @@ function findClosestStringLoose(freq: number): { string: number; label: string; 
   return closest;
 }
 
+function getRMS(buffer: Float32Array): number {
+  let sum = 0;
+  for (let i = 0; i < buffer.length; i++) {
+    sum += buffer[i] * buffer[i];
+  }
+  return Math.sqrt(sum / buffer.length);
+}
+
+export type StringMatch = { string: number; label: string; targetFreq: number; cents: number }; 
+
 function getTuningStatus(cents: number): "tuned" | "sharp" | "flat" | null {
   if (Math.abs(cents) <= 5) return "tuned";
   if (cents > 5) return "sharp";
@@ -65,4 +75,4 @@ function getTuningStatus(cents: number): "tuned" | "sharp" | "flat" | null {
   return null;
 }
 
-export { detectFrequency, frequencyToNote, findClosestString, findClosestStringLoose, getTuningStatus, GUITAR_STRINGS };
+export { detectFrequency, frequencyToNote, findClosestString, findClosestStringLoose, getTuningStatus, getRMS, GUITAR_STRINGS };
