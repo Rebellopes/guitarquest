@@ -11,12 +11,28 @@ const GUITAR_STRINGS = [
   { name: "E2", frequency: 82.41, string: 6, label: "E" },
 ];
 
-const detectPitch = YIN({ sampleRate: 44100, threshold: 0.1, probabilityThreshold: 0.15 });
+const detectPitch = YIN({ sampleRate: 44100, threshold: 0.15, probabilityThreshold: 0.1 });
+
+function normalizeBuffer(buffer: Float32Array): Float32Array {
+  let max = 0.001;
+  for (let i = 0; i < buffer.length; i++) {
+    const abs = Math.abs(buffer[i]);
+    if (abs > max) max = abs;
+  }
+  const scale = 1 / max;
+  const result = new Float32Array(buffer.length);
+  for (let i = 0; i < buffer.length; i++) {
+    result[i] = buffer[i] * scale;
+  }
+  return result;
+}
 
 function detectFrequency(buffer: Float32Array, sampleRate: number): number {
-  const freq = detectPitch(buffer);
-  if (!freq) return 0;
-  if (freq < 60 || freq > 1000) return 0;
+  let freq = detectPitch(buffer);
+  if (!freq || freq < 30) {
+    freq = detectPitch(normalizeBuffer(buffer));
+  }
+  if (!freq || freq < 60 || freq > 1000) return 0;
   return freq;
 }
 
