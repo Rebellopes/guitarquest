@@ -13,8 +13,21 @@ const GUITAR_STRINGS = [
 
 const detectPitch = YIN({ sampleRate: 44100, threshold: 0.1, probabilityThreshold: 0.1 });
 
+function lowPassFilter(buffer: Float32Array, sampleRate: number, cutoff: number): Float32Array {
+  const rc = 1 / (2 * Math.PI * cutoff);
+  const dt = 1 / sampleRate;
+  const alpha = dt / (rc + dt);
+  const out = new Float32Array(buffer.length);
+  out[0] = buffer[0];
+  for (let i = 1; i < buffer.length; i++) {
+    out[i] = out[i - 1] + alpha * (buffer[i] - out[i - 1]);
+  }
+  return out;
+}
+
 function detectFrequency(buffer: Float32Array, sampleRate: number): number {
-  const freq = detectPitch(buffer);
+  const filtered = lowPassFilter(buffer, sampleRate, 500);
+  const freq = detectPitch(filtered);
   if (!freq) return 0;
   if (freq < 60 || freq > 1000) return 0;
   return freq;
