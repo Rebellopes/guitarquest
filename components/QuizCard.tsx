@@ -62,21 +62,21 @@ export default function QuizCard({ question, onComplete, isLastExercise, questio
   };
 
   return (
-    <Animated.View className="bg-surface rounded-2xl p-5" style={shakeAnim}>
+    <Animated.View className="bg-surface rounded-2xl p-5 relative" style={shakeAnim}>
+      {totalQuestions !== undefined && questionIndex !== undefined && (
+        <View className="absolute top-3 right-3 bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center z-10">
+          <Text className="text-gray-500 text-xs font-bold">
+            {questionIndex + 1}/{totalQuestions}
+          </Text>
+        </View>
+      )}
       <View className="flex-row items-start mb-4">
         <Text className="text-2xl mr-2 mt-0.5">📝</Text>
-        <View className="flex-1 mr-2">
-          <Text className="text-white font-bold text-lg leading-6 break-words">
+        <View className="flex-1">
+          <Text className="text-white font-bold text-lg leading-6">
             {question.question}
           </Text>
         </View>
-        {totalQuestions !== undefined && questionIndex !== undefined && (
-          <View className="bg-[#1E1E2E] rounded-lg px-2 py-1 min-w-[36px] items-center">
-            <Text className="text-gray-500 text-xs font-bold">
-              {questionIndex + 1}/{totalQuestions}
-            </Text>
-          </View>
-        )}
       </View>
 
       {question.options.map((opt, idx) => (
